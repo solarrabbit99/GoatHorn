@@ -1,0 +1,7 @@
+main: com.solarrabbit.goathorn.GoatHorn
+name: GoatHorn
+version: ${project.version}
+author: SolarRabbit
+api-version: 1.17
+
+softdepend: [ItemsAdder]
