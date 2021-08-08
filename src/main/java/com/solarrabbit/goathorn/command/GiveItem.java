@@ -22,7 +22,6 @@ import java.util.Iterator;
 import com.solarrabbit.goathorn.GoatHorn;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -80,7 +79,7 @@ public class GiveItem implements CommandExecutor {
         Iterator<ItemStack> iterator = inventory.iterator();
         while (iterator.hasNext()) {
             ItemStack item = iterator.next();
-            if (item != null && item.getType() != Material.AIR) {
+            if (item != null) {
                 freeSlots++;
             }
         }

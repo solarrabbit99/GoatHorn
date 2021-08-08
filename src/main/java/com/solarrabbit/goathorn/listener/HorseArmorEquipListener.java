@@ -39,9 +39,8 @@ public class HorseArmorEquipListener implements Listener {
         if (!(inventory instanceof HorseInventory))
             return;
 
-        if (evt.isShiftClick()) {
+        if (evt.isShiftClick() && inventory.getItem(1) == null) {
             ItemStack item = evt.getCurrentItem();
-            // TODO shift-clicking with armor slot already occupied should be allowed
             if (item != null && this.plugin.isHorn(item)) {
                 evt.setCancelled(true);
                 return;
