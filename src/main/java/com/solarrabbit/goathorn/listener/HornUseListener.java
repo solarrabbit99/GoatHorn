@@ -47,7 +47,7 @@ public class HornUseListener implements Listener {
         if (evt.useInteractedBlock() != Result.DENY)
             return;
         ItemStack item = evt.getItem();
-        if (item == null || item.getType() != Material.IRON_HORSE_ARMOR)
+        if (!this.plugin.isHorn(item))
             return;
         Player player = evt.getPlayer();
         if (this.hasHornInBothHand(player) && evt.getHand() == EquipmentSlot.OFF_HAND)
@@ -66,8 +66,10 @@ public class HornUseListener implements Listener {
     }
 
     private void cooldown(Player player) {
-        int cooldownTicks = this.plugin.getConfig().getInt("horn-use.cooldown");
-        player.setCooldown(Material.IRON_HORSE_ARMOR, cooldownTicks);
+        int cooldownTicks = this.plugin.getConfig().getInt("horn-use.cooldown.duration");
+        if (this.plugin.getConfig().getBoolean("horn-use.cooldown.show-animation")) {
+            player.setCooldown(Material.IRON_HORSE_ARMOR, cooldownTicks);
+        }
         UUID uuid = player.getUniqueId();
         cooldowns.add(uuid);
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.cooldowns.remove(uuid), cooldownTicks);

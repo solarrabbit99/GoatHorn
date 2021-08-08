@@ -17,8 +17,12 @@ horn-use:
   # Any value higher than 100 increasing the range of the horn.
   volume: 750
   pitch: 1
-  # The sound lasts roughly 100 ticks.
-  cooldown: 100
+  cooldown:
+    # The sound lasts roughly 100 ticks.
+    duration: 100
+    # If set to true, cooldown animation will be applied to all items that are of type iron
+    # horse armor for the player.
+    show-animation: true
 
 ############################################################
 # +------------------------------------------------------+ #
