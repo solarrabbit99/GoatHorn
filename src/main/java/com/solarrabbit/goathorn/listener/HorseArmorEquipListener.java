@@ -35,8 +35,6 @@ public class HorseArmorEquipListener implements Listener {
 
     @EventHandler
     public void onArmorEquip(InventoryClickEvent evt) {
-        if (evt.isCancelled()) // TODO not working yet
-            return;
         Inventory inventory = evt.getView().getTopInventory();
         if (!(inventory instanceof HorseInventory))
             return;

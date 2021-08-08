@@ -27,6 +27,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
@@ -43,6 +44,8 @@ public class HornUseListener implements Listener {
 
     @EventHandler
     public void onHornUse(PlayerInteractEvent evt) {
+        if (evt.useInteractedBlock() != Result.DENY)
+            return;
         ItemStack item = evt.getItem();
         if (item == null || item.getType() != Material.IRON_HORSE_ARMOR)
             return;
