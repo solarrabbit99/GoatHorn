@@ -18,7 +18,6 @@
 
 package com.solarrabbit.goathorn.command;
 
-import java.util.Iterator;
 import com.solarrabbit.goathorn.GoatHorn;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,7 +26,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class GiveItem implements CommandExecutor {
     private GoatHorn plugin;
