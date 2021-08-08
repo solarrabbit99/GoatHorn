@@ -73,13 +73,16 @@ public final class GoatHorn extends JavaPlugin implements Listener {
     }
 
     public boolean isHorn(ItemStack item) {
+        if (item == null)
+            return false;
         if (this.hasItemsAdder) {
             CustomStack stack = CustomStack.byItemStack(item);
             return stack == null ? false : stack.getNamespacedID().equals("goathorn:goathorn");
         } else {
-            return Optional.ofNullable(item).map(ItemStack::getItemMeta).filter(ItemMeta::hasCustomModelData)
+            boolean sameModelData = Optional.ofNullable(item.getItemMeta()).filter(ItemMeta::hasCustomModelData)
                     .map(ItemMeta::getCustomModelData).filter(i -> i.equals(this.getConfig().getInt("model-data")))
                     .isPresent();
+            return item.getType() == Material.IRON_HORSE_ARMOR && sameModelData;
         }
     }
 
