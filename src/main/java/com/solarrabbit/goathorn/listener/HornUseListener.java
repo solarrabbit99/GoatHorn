@@ -18,44 +18,62 @@
 
 package com.solarrabbit.goathorn.listener;
 
+import java.util.HashSet;
+import java.util.UUID;
+import com.solarrabbit.goathorn.GoatHorn;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
-// TODO
 public class HornUseListener implements Listener {
-    public HornUseListener(Plugin plugin) {
+    private HashSet<UUID> cooldowns;
+    private GoatHorn plugin;
 
+    public HornUseListener(GoatHorn plugin) {
+        this.plugin = plugin;
+        this.cooldowns = new HashSet<>();
     }
 
     @EventHandler
     public void onHornUse(PlayerInteractEvent evt) {
-        if (evt.getItem() == null || evt.getItem().getType() != Material.IRON_HORSE_ARMOR)
+        ItemStack item = evt.getItem();
+        if (item == null || item.getType() != Material.IRON_HORSE_ARMOR)
+            return;
+        Player player = evt.getPlayer();
+        if (this.hasHornInBothHand(player) && evt.getHand() == EquipmentSlot.OFF_HAND)
+            return;
+        if (cooldowns.contains(player.getUniqueId()))
             return;
 
+        playSound(player);
+        cooldown(player);
     }
 
-    // private boolean hasHornInBothHand(Player player) {
+    private void playSound(Player player) {
+        float volume = (float) this.plugin.getConfig().getDouble("horn-use.volume");
+        float pitch = (float) this.plugin.getConfig().getDouble("horn-use.pitch");
+        player.getWorld().playSound(player.getLocation(), Sound.EVENT_RAID_HORN, volume, pitch);
+    }
 
-    // }
+    private void cooldown(Player player) {
+        int cooldownTicks = this.plugin.getConfig().getInt("horn-use.cooldown");
+        player.setCooldown(Material.IRON_HORSE_ARMOR, cooldownTicks);
+        UUID uuid = player.getUniqueId();
+        cooldowns.add(uuid);
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.cooldowns.remove(uuid), cooldownTicks);
+    }
 
-    // @Override
-    // public void onPacketReceiving(PacketEvent event) {
-    // if (event.getPacketType() == Server.NAMED_SOUND_EFFECT ||
-    // event.getPacketType() == Server.ENTITY_SOUND) {
-    // List<SoundCategory> lst = event.getPacket().getSoundCategories().getValues();
-    // lst.forEach(category -> plugin.getLogger().info(event.getPacketType() + ": "
-    // + category));
-
-    // List<Sound> soundlst = event.getPacket().getSoundEffects().getValues();
-    // soundlst.forEach(sound -> plugin.getLogger().info(event.getPacketType() + ":
-    // " + sound));
-    // } else {
-    // List<ItemStack> lst = event.getPacket().getItemModifier().getValues();
-    // lst.forEach(item -> plugin.getLogger().info(event.getPacketType() + ": " +
-    // item.getType()));
-    // }
-    // }
+    private boolean hasHornInBothHand(Player player) {
+        EntityEquipment equipment = player.getEquipment();
+        ItemStack main = equipment.getItemInMainHand();
+        ItemStack off = equipment.getItemInOffHand();
+        return this.plugin.isHorn(main) && this.plugin.isHorn(off);
+    }
 }

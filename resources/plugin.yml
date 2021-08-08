@@ -4,7 +4,6 @@ version: ${project.version}
 author: SolarRabbit
 api-version: 1.17
 
-depend: [ProtocolLib]
 softdepend: [ItemsAdder]
 
 commands:

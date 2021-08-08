@@ -11,7 +11,14 @@ loot:
   # of horns to be dropped on each goat's death. The decimal part of the number indicates
   # the rate an extra horn to be dropped. For example, if we have the drop rate as 1.5, 1
   # horn plus 0.5 chance of a second horn will be dropped.
-  drop-rate: 0.2
+  drop-rate: 0.025
+
+horn-use:
+  # Any volume higher than 100 increasing the range of the horn sound.
+  volume: 750
+  pitch: 1
+  # The horn sound lasts roughly 100 ticks.
+  cooldown: 100
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -23,7 +30,7 @@ loot:
 #   in the resource pack. DO NOT change model data once    #
 #   players start obtaining goat horns.                    #
 #                                                          #
-#   Note: You can ssafely ignore this section if you have  #
+#   Note: You can safely ignore this section if you have   #
 #   ItemsAdder installed.                                  #
 #                                                          #
 ############################################################

@@ -18,10 +18,12 @@
 
 package com.solarrabbit.goathorn;
 
+import java.util.Optional;
 import com.solarrabbit.goathorn.command.GiveItem;
 import com.solarrabbit.goathorn.command.ReloadConfig;
 import com.solarrabbit.goathorn.listener.GoatDeathListener;
 import com.solarrabbit.goathorn.listener.HornUseListener;
+import com.solarrabbit.goathorn.listener.HorseArmorEquipListener;
 import com.solarrabbit.goathorn.listener.SmeltingListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -55,8 +57,9 @@ public final class GoatHorn extends JavaPlugin implements Listener {
             this.loadItem();
         }
 
-        manager.registerEvents(new GoatDeathListener(this), this);
         manager.registerEvents(new SmeltingListener(this), this);
+        manager.registerEvents(new HorseArmorEquipListener(this),this);
+        manager.registerEvents(new GoatDeathListener(this), this);
         manager.registerEvents(new HornUseListener(this), this);
     }
 
@@ -70,7 +73,14 @@ public final class GoatHorn extends JavaPlugin implements Listener {
     }
 
     public boolean isHorn(ItemStack item) {
-        return this.sampleHorn.isSimilar(item);
+        if (this.hasItemsAdder) {
+            CustomStack stack = CustomStack.byItemStack(item);
+            return stack == null ? false : stack.getNamespacedID().equals("goathorn:goathorn");
+        } else {
+            return Optional.ofNullable(item).map(ItemStack::getItemMeta).filter(ItemMeta::hasCustomModelData)
+                    .map(ItemMeta::getCustomModelData).filter(i -> i.equals(this.getConfig().getInt("model-data")))
+                    .isPresent();
+        }
     }
 
     private void loadItem() {
