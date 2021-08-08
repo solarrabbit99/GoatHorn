@@ -58,7 +58,7 @@ public final class GoatHorn extends JavaPlugin implements Listener {
         }
 
         manager.registerEvents(new SmeltingListener(this), this);
-        manager.registerEvents(new HorseArmorEquipListener(this),this);
+        manager.registerEvents(new HorseArmorEquipListener(this), this);
         manager.registerEvents(new GoatDeathListener(this), this);
         manager.registerEvents(new HornUseListener(this), this);
     }
@@ -91,6 +91,7 @@ public final class GoatHorn extends JavaPlugin implements Listener {
         } else {
             this.sampleHorn = new ItemStack(Material.IRON_HORSE_ARMOR);
             ItemMeta meta = this.sampleHorn.getItemMeta();
+            meta.setDisplayName(ChatColor.WHITE + "Goat Horn");
             meta.setCustomModelData(this.getConfig().getInt("model-data"));
             this.sampleHorn.setItemMeta(meta);
         }

@@ -19,6 +19,7 @@
 package com.solarrabbit.goathorn.listener;
 
 import com.solarrabbit.goathorn.GoatHorn;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.HorseInventory;
@@ -32,13 +33,17 @@ public class HorseArmorEquipListener implements Listener {
         this.plugin = plugin;
     }
 
+    @EventHandler
     public void onArmorEquip(InventoryClickEvent evt) {
+        if (evt.isCancelled()) // TODO not working yet
+            return;
         Inventory inventory = evt.getView().getTopInventory();
         if (!(inventory instanceof HorseInventory))
             return;
 
         if (evt.isShiftClick()) {
             ItemStack item = evt.getCurrentItem();
+            // TODO shift-clicking with armor slot already occupied should be allowed
             if (item != null && this.plugin.isHorn(item)) {
                 evt.setCancelled(true);
                 return;

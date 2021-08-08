@@ -14,10 +14,10 @@ loot:
   drop-rate: 0.025
 
 horn-use:
-  # Any volume higher than 100 increasing the range of the horn sound.
+  # Any value higher than 100 increasing the range of the horn.
   volume: 750
   pitch: 1
-  # The horn sound lasts roughly 100 ticks.
+  # The sound lasts roughly 100 ticks.
   cooldown: 100
 
 ############################################################
