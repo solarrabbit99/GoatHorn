@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.Event.Result;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
@@ -45,6 +46,8 @@ public class HornUseListener implements Listener {
     @EventHandler
     public void onHornUse(PlayerInteractEvent evt) {
         if (evt.useInteractedBlock() != Result.DENY)
+            return;
+        if (evt.getAction() != Action.RIGHT_CLICK_AIR && evt.getAction() != Action.RIGHT_CLICK_BLOCK)
             return;
         ItemStack item = evt.getItem();
         if (!this.plugin.isHorn(item))
