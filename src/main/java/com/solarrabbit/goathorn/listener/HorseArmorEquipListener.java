@@ -21,6 +21,7 @@ package com.solarrabbit.goathorn.listener;
 import com.solarrabbit.goathorn.GoatHorn;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.Inventory;
@@ -35,17 +36,32 @@ public class HorseArmorEquipListener implements Listener {
 
     @EventHandler
     public void onArmorEquip(InventoryClickEvent evt) {
-        Inventory inventory = evt.getView().getTopInventory();
-        if (!(inventory instanceof HorseInventory))
+        Inventory top = evt.getView().getTopInventory();
+        if (!(top instanceof HorseInventory))
+            return;
+        Inventory clicked = evt.getClickedInventory();
+        if (clicked == null)
             return;
 
-        if (evt.isShiftClick() && inventory.getItem(1) == null) {
-            ItemStack item = evt.getCurrentItem();
+        if (evt.isShiftClick()) {
+            if (clicked.equals(top) || top.getItem(1) != null) {
+                return;
+            } else {
+                ItemStack item = evt.getCurrentItem();
+                if (item != null && this.plugin.isHorn(item)) {
+                    evt.setCancelled(true);
+                    return;
+                }
+            }
+        } else if ((evt.getAction() == InventoryAction.HOTBAR_SWAP
+                || evt.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD) && clicked.equals(top)) {
+            int button = evt.getHotbarButton();
+            ItemStack item = evt.getView().getBottomInventory().getItem(button);
             if (item != null && this.plugin.isHorn(item)) {
                 evt.setCancelled(true);
                 return;
             }
-        } else if (evt.getClickedInventory().equals(inventory)) {
+        } else if (clicked.equals(top)) {
             ItemStack item = evt.getCursor();
             if (item != null && this.plugin.isHorn(item)) {
                 evt.setCancelled(true);

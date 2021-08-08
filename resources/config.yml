@@ -14,7 +14,7 @@ loot:
   drop-rate: 0.025
 
 horn-use:
-  # Any value higher than 100 increasing the range of the horn.
+  # Any value higher than 100 increases the range of the horn.
   volume: 750
   pitch: 1
   cooldown:
