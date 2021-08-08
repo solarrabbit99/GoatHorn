@@ -19,8 +19,10 @@
 package com.solarrabbit.goathorn.listener;
 
 import com.solarrabbit.goathorn.GoatHorn;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.HorseInventory;
@@ -35,7 +37,7 @@ public class HorseArmorEquipListener implements Listener {
     }
 
     @EventHandler
-    public void onArmorEquip(InventoryClickEvent evt) {
+    public void onInventoryEquip(InventoryClickEvent evt) {
         Inventory top = evt.getView().getTopInventory();
         if (!(top instanceof HorseInventory))
             return;
@@ -48,25 +50,29 @@ public class HorseArmorEquipListener implements Listener {
                 return;
             } else {
                 ItemStack item = evt.getCurrentItem();
-                if (item != null && this.plugin.isHorn(item)) {
-                    evt.setCancelled(true);
-                    return;
-                }
+                cancelIfHorn(evt, item);
             }
         } else if ((evt.getAction() == InventoryAction.HOTBAR_SWAP
                 || evt.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD) && clicked.equals(top)) {
             int button = evt.getHotbarButton();
             ItemStack item = evt.getView().getBottomInventory().getItem(button);
-            if (item != null && this.plugin.isHorn(item)) {
-                evt.setCancelled(true);
-                return;
-            }
+            cancelIfHorn(evt, item);
         } else if (clicked.equals(top)) {
             ItemStack item = evt.getCursor();
-            if (item != null && this.plugin.isHorn(item)) {
-                evt.setCancelled(true);
-                return;
-            }
+            cancelIfHorn(evt, item);
+        }
+    }
+
+    @EventHandler
+    public void onDispenserEquip(BlockDispenseArmorEvent evt) {
+        ItemStack item = evt.getItem();
+        cancelIfHorn(evt, item);
+    }
+
+    private void cancelIfHorn(Cancellable evt, ItemStack item) {
+        if (item != null && this.plugin.isHorn(item)) {
+            evt.setCancelled(true);
+            return;
         }
     }
 }
