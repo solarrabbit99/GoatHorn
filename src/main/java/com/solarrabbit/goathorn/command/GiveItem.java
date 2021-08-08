@@ -1,0 +1,79 @@
+package com.solarrabbit.goathorn.command;
+
+import java.util.Iterator;
+import com.solarrabbit.goathorn.GoatHorn;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+public class GiveItem implements CommandExecutor {
+    private GoatHorn plugin;
+
+    public GiveItem(GoatHorn plugin) {
+        this.plugin = plugin;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length < 1) {
+            return false;
+        }
+        Player targetPlayer = Bukkit.getPlayer(args[0]);
+        if (targetPlayer == null) {
+            sender.sendMessage(ChatColor.RED + "Cannot find specified player!");
+            return false;
+        }
+
+        if (args.length < 2) {
+            this.giveItems(sender, targetPlayer, 1);
+            return true;
+        } else {
+            int amount = getPositiveInteger(args[1]);
+            if (amount <= 0) {
+                sender.sendMessage(ChatColor.RED + "Invalid input amount of items...");
+                return false;
+            } else {
+                giveItems(sender, targetPlayer, amount);
+                return true;
+            }
+        }
+    }
+
+    private void giveItems(CommandSender requester, Player receiver, int requestAmount) {
+        Inventory inventory = receiver.getInventory();
+        if (getInventoryFreeSlots(inventory) < requestAmount) {
+            requester.sendMessage(ChatColor.RED + "Player does not have enough inventory space!");
+        } else {
+            for (int i = 0; i < requestAmount; i++) {
+                inventory.addItem(this.plugin.getItem());
+            }
+            requester.sendMessage(ChatColor.GREEN + "Gave " + receiver.getName() + " " + requestAmount + " goat horns");
+        }
+    }
+
+    private int getInventoryFreeSlots(Inventory inventory) {
+        int freeSlots = 0;
+        Iterator<ItemStack> iterator = inventory.iterator();
+        while (iterator.hasNext()) {
+            ItemStack item = iterator.next();
+            if (item != null && item.getType() != Material.AIR) {
+                freeSlots++;
+            }
+        }
+        return freeSlots;
+    }
+
+    private int getPositiveInteger(String str) {
+        try {
+            return Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+}

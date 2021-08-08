@@ -1,17 +1,32 @@
 ############################################################
 # +------------------------------------------------------+ #
+# |                  Main Configurations                 | #
+# +------------------------------------------------------+ #
+############################################################
+
+loot:
+  # If enabled, goat will drop horns upon death, according to the rate indicated below.
+  enabled: true
+  # Provide a non-negative number. The integral part of the number will be the base number
+  # of horns to be dropped on each goat's death. The decimal part of the number indicates
+  # the rate an extra horn to be dropped. For example, if we have the drop rate as 1.5, 1
+  # horn plus 0.5 chance of a second horn will be dropped.
+  drop-rate: 0.2
+
+############################################################
+# +------------------------------------------------------+ #
 # |                      Model Data                      | #
 # +------------------------------------------------------+ #
 #                                                          #
 #   Deconflict your custom model data here. Make sure      #
 #   that the data here correctly corresponds to the data   #
-#   in the resource pack. Keep custom model data to no     #
-#   than 6 digits. DO NOT change model data once players   #
-#   start crafting dyed bundles!                           #
+#   in the resource pack. DO NOT change model data once    #
+#   players start obtaining goat horns.                    #
+#                                                          #
+#   Note: You can ssafely ignore this section if you have  #
+#   ItemsAdder installed.                                  #
 #                                                          #
 ############################################################
 
-loot:
-  enabled: true
-  always-drop: true
-  drop-rate: 2
+# Actual item is an ender-pearl
+model-data: 10

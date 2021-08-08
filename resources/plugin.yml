@@ -4,4 +4,19 @@ version: ${project.version}
 author: SolarRabbit
 api-version: 1.17
 
+depend: [ProtocolLib]
 softdepend: [ItemsAdder]
+
+commands:
+  ghreload:
+    description: Reloads GoatHorn plugin configurations.
+    permission: goathorn.admin
+  ghgive:
+    description: Gives player goat horns.
+    usage: /<command> <player> [amount]
+    permission: goathorn.admin
+
+permissions:
+  goathorn.admin:
+    description: Allow access to GoatHorn commands.
+    default: op
