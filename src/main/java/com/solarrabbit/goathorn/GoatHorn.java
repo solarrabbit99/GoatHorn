@@ -21,6 +21,8 @@ package com.solarrabbit.goathorn;
 import com.solarrabbit.goathorn.command.GiveItem;
 import com.solarrabbit.goathorn.command.ReloadConfig;
 import com.solarrabbit.goathorn.listener.GoatDeathListener;
+import com.solarrabbit.goathorn.listener.HornUseListener;
+import com.solarrabbit.goathorn.listener.SmeltingListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -43,18 +45,19 @@ public final class GoatHorn extends JavaPlugin implements Listener {
         getCommand("ghreload").setExecutor(new ReloadConfig(this));
         getCommand("ghgive").setExecutor(new GiveItem(this));
 
+        PluginManager manager = getServer().getPluginManager();
         this.hasItemsAdder = this.getServer().getPluginManager().getPlugin("ItemsAdder") != null;
         if (this.hasItemsAdder) {
             getServer().getConsoleSender().sendMessage(
                     ChatColor.AQUA + "[GoatHorn] ItemsAdder detected! Waiting for ItemsAdder to load items...");
+            manager.registerEvents(this, this);
         } else {
-            getServer().getConsoleSender().sendMessage(ChatColor.GOLD
-                    + "[ColorBundles] Ignore the error message regarding plugin failing to register ItemsAdder's events if you do not have ItemsAdder installed...");
             this.loadItem();
         }
 
-        PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new GoatDeathListener(this), this);
+        manager.registerEvents(new SmeltingListener(this), this);
+        manager.registerEvents(new HornUseListener(this), this);
     }
 
     @EventHandler
@@ -64,6 +67,10 @@ public final class GoatHorn extends JavaPlugin implements Listener {
 
     public ItemStack getItem() {
         return this.sampleHorn.clone();
+    }
+
+    public boolean isHorn(ItemStack item) {
+        return this.sampleHorn.isSimilar(item);
     }
 
     private void loadItem() {
