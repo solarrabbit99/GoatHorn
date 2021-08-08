@@ -76,10 +76,8 @@ public class GiveItem implements CommandExecutor {
 
     private int getInventoryFreeSlots(Inventory inventory) {
         int freeSlots = 0;
-        Iterator<ItemStack> iterator = inventory.iterator();
-        while (iterator.hasNext()) {
-            ItemStack item = iterator.next();
-            if (item != null) {
+        for (int i = 0; i < 36; i++) {
+            if (inventory.getItem(i) == null) {
                 freeSlots++;
             }
         }
