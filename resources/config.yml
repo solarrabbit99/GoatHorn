@@ -39,5 +39,8 @@ horn-use:
 #                                                          #
 ############################################################
 
+# Default name of item
+name: Goat Horn
+
 # Actual item is an iron horse armor
 model-data: 10

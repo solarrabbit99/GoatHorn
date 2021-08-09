@@ -65,8 +65,9 @@ public class HorseArmorEquipListener implements Listener {
 
     @EventHandler
     public void onDispenserEquip(BlockDispenseArmorEvent evt) {
-        ItemStack item = evt.getItem();
-        cancelIfHorn(evt, item);
+        if (this.plugin.isHorn(evt.getItem())) {
+            evt.setCancelled(true);
+        }
     }
 
     private void cancelIfHorn(Cancellable evt, ItemStack item) {
