@@ -18,8 +18,6 @@
 
 package com.solarrabbit.goathorn;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Optional;
 import com.solarrabbit.goathorn.command.GiveItem;
 import com.solarrabbit.goathorn.command.ReloadConfig;
@@ -27,30 +25,23 @@ import com.solarrabbit.goathorn.listener.GoatDeathListener;
 import com.solarrabbit.goathorn.listener.HornUseListener;
 import com.solarrabbit.goathorn.listener.HorseArmorEquipListener;
 import com.solarrabbit.goathorn.listener.SmeltingListener;
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import dev.lone.itemsadder.api.CustomStack;
 import dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
-import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.phys.AABB;
 
 public final class GoatHorn extends JavaPlugin implements Listener {
     private boolean hasItemsAdder;
@@ -120,48 +111,18 @@ public final class GoatHorn extends JavaPlugin implements Listener {
     }
 
     private void registerDispenserBehaviour() {
-        DispenserBlock.registerBehavior((ItemLike) Items.IRON_HORSE_ARMOR, new OptionalDispenseItemBehavior() {
+        DispenseItemBehavior defaultBehavior = DispenserBlock.DISPENSER_REGISTRY.get(Items.IRON_HORSE_ARMOR);
+        DispenserBlock.registerBehavior((ItemLike) Items.IRON_HORSE_ARMOR, new DefaultDispenseItemBehavior() {
             @Override
-            protected net.minecraft.world.item.ItemStack execute(BlockSource isourceblock,
+            public net.minecraft.world.item.ItemStack execute(BlockSource isourceblock,
                     net.minecraft.world.item.ItemStack itemstack) {
-                Bukkit.broadcastMessage("YAS!!");
-
-                BlockPos blockposition = isourceblock.getPos()
-                        .shift(isourceblock.getBlockState().getValue(DispenserBlock.FACING));
-                Collection<AbstractHorse> list = isourceblock.getLevel().getEntitiesOfClass(AbstractHorse.class,
-                        new AABB(blockposition), (entityhorseabstract) -> {
-                            return entityhorseabstract.isAlive() && entityhorseabstract.canWearArmor();
-                        });
-                Iterator<AbstractHorse> iterator1 = list.iterator();
-
-                AbstractHorse entityhorseabstract;
-                do {
-                    if (!iterator1.hasNext()) {
-                        return super.dispense(isourceblock, itemstack);
-                    }
-                    entityhorseabstract = iterator1.next();
-                } while (!entityhorseabstract.isArmor(itemstack) || entityhorseabstract.isWearingArmor()
-                        || !entityhorseabstract.isTamed());
-
-                Block block = isourceblock.getLevel().getWorld().getBlockAt(isourceblock.getPos().getX(),
-                        isourceblock.getPos().getY(), isourceblock.getPos().getZ());
                 CraftItemStack craftItem = CraftItemStack.asCraftMirror(itemstack);
-                BlockDispenseArmorEvent event = new BlockDispenseArmorEvent(block, craftItem.clone(),
-                        (CraftLivingEntity) entityhorseabstract.getBukkitEntity());
 
-                if (!DispenserBlock.eventFired) {
-                    isourceblock.getLevel().getCraftServer().getPluginManager().callEvent(event);
+                if (!GoatHorn.this.isHorn(craftItem)) {
+                    return defaultBehavior.dispense(isourceblock, itemstack);
+                } else {
+                    return super.execute(isourceblock, itemstack);
                 }
-
-                if (event.isCancelled()) {
-                    return super.dispense(isourceblock, itemstack);
-                }
-
-                net.minecraft.world.item.ItemStack clone = itemstack.copy();
-                itemstack.setCount(itemstack.getCount() - 1);
-                entityhorseabstract.getSlot(401).set(clone);
-                this.setSuccess(true);
-                return itemstack;
             }
         });
     }
