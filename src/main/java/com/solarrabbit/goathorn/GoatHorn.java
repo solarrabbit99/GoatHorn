@@ -27,10 +27,12 @@ import com.solarrabbit.goathorn.listener.HorseArmorEquipListener;
 import com.solarrabbit.goathorn.listener.SmeltingListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import dev.lone.itemsadder.api.CustomStack;
@@ -44,6 +46,7 @@ public final class GoatHorn extends JavaPlugin implements Listener {
     private boolean hasItemsAdder;
     private ItemStack sampleHorn;
     private DispenseItemBehavior defaultBehavior;
+    private NamespacedKey key;
 
     @Override
     public void onEnable() {
@@ -88,15 +91,8 @@ public final class GoatHorn extends JavaPlugin implements Listener {
     public boolean isHorn(ItemStack item) {
         if (item == null)
             return false;
-        if (this.hasItemsAdder) {
-            CustomStack stack = CustomStack.byItemStack(item);
-            return stack == null ? false : stack.getNamespacedID().equals("goathorn:goathorn");
-        } else {
-            boolean sameModelData = Optional.ofNullable(item.getItemMeta()).filter(ItemMeta::hasCustomModelData)
-                    .map(ItemMeta::getCustomModelData).filter(i -> i.equals(this.getConfig().getInt("model-data")))
-                    .isPresent();
-            return item.getType() == Material.IRON_HORSE_ARMOR && sameModelData;
-        }
+        return Optional.ofNullable(item.getItemMeta()).map(ItemMeta::getPersistentDataContainer)
+                .filter(container -> container.has(key, PersistentDataType.BYTE)).isPresent();
     }
 
     private void loadItem() {
@@ -111,6 +107,11 @@ public final class GoatHorn extends JavaPlugin implements Listener {
             meta.setCustomModelData(this.getConfig().getInt("model-data"));
             this.sampleHorn.setItemMeta(meta);
         }
+        ItemMeta meta = this.sampleHorn.getItemMeta();
+        this.key = new NamespacedKey(this, "goathorn");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 0);
+        this.sampleHorn.setItemMeta(meta);
+
         getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[GoatHorn] Loaded item!");
     }
 }
