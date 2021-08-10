@@ -27,7 +27,6 @@ import com.solarrabbit.goathorn.listener.HorseArmorEquipListener;
 import com.solarrabbit.goathorn.listener.SmeltingListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -36,8 +35,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import dev.lone.itemsadder.api.CustomStack;
 import dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent;
-import net.minecraft.core.BlockSource;
-import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -46,6 +43,7 @@ import net.minecraft.world.level.block.DispenserBlock;
 public final class GoatHorn extends JavaPlugin implements Listener {
     private boolean hasItemsAdder;
     private ItemStack sampleHorn;
+    private DispenseItemBehavior defaultBehavior;
 
     @Override
     public void onEnable() {
@@ -69,7 +67,13 @@ public final class GoatHorn extends JavaPlugin implements Listener {
         manager.registerEvents(new GoatDeathListener(this), this);
         manager.registerEvents(new HornUseListener(this), this);
 
-        registerDispenserBehaviour();
+        defaultBehavior = DispenserBlock.DISPENSER_REGISTRY.get(Items.IRON_HORSE_ARMOR);
+        DispenserBlock.registerBehavior((ItemLike) Items.IRON_HORSE_ARMOR, new CustomDispenseBehavior(defaultBehavior));
+    }
+
+    @Override
+    public void onDisable() {
+        DispenserBlock.registerBehavior((ItemLike) Items.IRON_HORSE_ARMOR, defaultBehavior);
     }
 
     @EventHandler
@@ -108,22 +112,5 @@ public final class GoatHorn extends JavaPlugin implements Listener {
             this.sampleHorn.setItemMeta(meta);
         }
         getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[GoatHorn] Loaded item!");
-    }
-
-    private void registerDispenserBehaviour() {
-        DispenseItemBehavior defaultBehavior = DispenserBlock.DISPENSER_REGISTRY.get(Items.IRON_HORSE_ARMOR);
-        DispenserBlock.registerBehavior((ItemLike) Items.IRON_HORSE_ARMOR, new DefaultDispenseItemBehavior() {
-            @Override
-            public net.minecraft.world.item.ItemStack execute(BlockSource isourceblock,
-                    net.minecraft.world.item.ItemStack itemstack) {
-                CraftItemStack craftItem = CraftItemStack.asCraftMirror(itemstack);
-
-                if (!GoatHorn.this.isHorn(craftItem)) {
-                    return defaultBehavior.dispense(isourceblock, itemstack);
-                } else {
-                    return super.execute(isourceblock, itemstack);
-                }
-            }
-        });
     }
 }

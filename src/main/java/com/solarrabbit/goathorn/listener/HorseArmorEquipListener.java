@@ -22,6 +22,7 @@ import com.solarrabbit.goathorn.GoatHorn;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.HorseInventory;
@@ -60,6 +61,12 @@ public class HorseArmorEquipListener implements Listener {
             ItemStack item = evt.getCursor();
             cancelIfHorn(evt, item);
         }
+    }
+
+    @EventHandler
+    public void onDispenseArmor(BlockDispenseArmorEvent evt) {
+        if (this.plugin.isHorn(evt.getItem()))
+            evt.setCancelled(true);
     }
 
     private void cancelIfHorn(Cancellable evt, ItemStack item) {
