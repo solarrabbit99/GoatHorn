@@ -21,6 +21,7 @@ package com.solarrabbit.goathorn.listener;
 import com.solarrabbit.goathorn.GoatHorn;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Goat;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -35,6 +36,8 @@ public class GoatDeathListener implements Listener {
     @EventHandler
     public void onGoatDeath(EntityDeathEvent evt) {
         if (evt.getEntityType() != EntityType.GOAT || !this.plugin.getConfig().getBoolean("loot.enabled"))
+            return;
+        if (!((Goat) evt.getEntity()).isAdult() && !this.plugin.getConfig().getBoolean("loot.baby"))
             return;
 
         int dropAmount = getDroppedAmount(this.plugin.getConfig().getDouble("loot.drop-rate"));
