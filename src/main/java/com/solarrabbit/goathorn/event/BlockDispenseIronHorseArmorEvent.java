@@ -24,6 +24,11 @@ import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+/**
+ * Encapsulates an event where a dispenser is about to equip a horse with an
+ * iron horse armor. If cancelled, the relevant iron horse armor will be
+ * dispensed as an item.
+ */
 public class BlockDispenseIronHorseArmorEvent extends BlockDispenseEvent {
     private final LivingEntity target;
 
@@ -32,6 +37,12 @@ public class BlockDispenseIronHorseArmorEvent extends BlockDispenseEvent {
         this.target = target;
     }
 
+    /**
+     * Get the horse entity that the dispenser is targetting, for which the iron
+     * horse armor will equip on if the event is not cancelled.
+     * 
+     * @return target horse entity
+     */
     public LivingEntity getTargetEntity() {
         return this.target;
     }
