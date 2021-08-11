@@ -65,7 +65,7 @@ To disable player from blaring horns:
 
 ```java
 @EventHandler
-public void onBlare(PlayerBlareHornEvent event) {
+public void onBlareHorn(PlayerBlareHornEvent event) {
     if (event.getPlayer().hasPermission("server.rank.example"))
         event.setCancelled(true);
 }
