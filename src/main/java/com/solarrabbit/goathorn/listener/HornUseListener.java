@@ -46,8 +46,6 @@ public class HornUseListener implements Listener {
 
     @EventHandler
     public void onHornUse(PlayerInteractEvent evt) {
-        Bukkit.broadcastMessage(
-                "Use Interacted Block: " + evt.useInteractedBlock() + ", use item in hand: " + evt.useItemInHand());
         if (evt.useItemInHand() == Result.DENY || evt.getAction() != Action.RIGHT_CLICK_AIR)
             return;
         ItemStack item = evt.getItem();

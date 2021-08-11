@@ -84,10 +84,21 @@ public final class GoatHorn extends JavaPlugin implements Listener {
         loadItem();
     }
 
+    /**
+     * Get the loaded default goat horn itemstack.
+     *
+     * @return default goat horn itemstack
+     */
     public ItemStack getItem() {
         return this.sampleHorn.clone();
     }
 
+    /**
+     * Return whether the given item is a goat horn.
+     * 
+     * @param item of interest
+     * @return {@code true} is the item is a goat horn
+     */
     public boolean isHorn(ItemStack item) {
         if (item == null)
             return false;
