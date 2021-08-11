@@ -21,6 +21,7 @@ package com.solarrabbit.goathorn.listener;
 import java.util.HashSet;
 import java.util.UUID;
 import com.solarrabbit.goathorn.GoatHorn;
+import com.solarrabbit.goathorn.event.PlayerBlareHornEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -58,8 +59,13 @@ public class HornUseListener implements Listener {
         if (cooldowns.contains(player.getUniqueId()))
             return;
 
-        playSound(player);
-        cooldown(player);
+        PlayerBlareHornEvent event = new PlayerBlareHornEvent(player, item);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (!event.isCancelled()) {
+            playSound(player);
+            cooldown(player);
+        }
     }
 
     private void playSound(Player player) {

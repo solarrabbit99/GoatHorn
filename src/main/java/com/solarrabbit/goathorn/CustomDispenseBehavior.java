@@ -20,10 +20,10 @@ package com.solarrabbit.goathorn;
 
 import java.util.Collection;
 import java.util.Iterator;
+import com.solarrabbit.goathorn.event.BlockDispenseIronHorseArmorEvent;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
-import org.bukkit.event.block.BlockDispenseArmorEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
@@ -67,7 +67,7 @@ public class CustomDispenseBehavior extends DefaultDispenseItemBehavior {
         } while (!entityhorseabstract.isArmor(itemstack) || entityhorseabstract.isWearingArmor()
                 || !entityhorseabstract.isTamed());
 
-        BlockDispenseArmorEvent event = new BlockDispenseArmorEvent(block, craftItem.clone(),
+        BlockDispenseIronHorseArmorEvent event = new BlockDispenseIronHorseArmorEvent(block, craftItem.clone(),
                 (CraftLivingEntity) ((Entity) entityhorseabstract).getBukkitEntity());
 
         if (!DispenserBlock.eventFired) {
