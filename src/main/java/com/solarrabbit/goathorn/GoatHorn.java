@@ -37,15 +37,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import dev.lone.itemsadder.api.CustomStack;
 import dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent;
-import net.minecraft.core.dispenser.DispenseItemBehavior;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.DispenserBlock;
 
 public final class GoatHorn extends JavaPlugin implements Listener {
     private boolean hasItemsAdder;
     private ItemStack sampleHorn;
-    private DispenseItemBehavior defaultBehavior;
     private NamespacedKey key;
 
     @Override
@@ -69,14 +64,6 @@ public final class GoatHorn extends JavaPlugin implements Listener {
         manager.registerEvents(new HorseArmorEquipListener(this), this);
         manager.registerEvents(new GoatDeathListener(this), this);
         manager.registerEvents(new HornUseListener(this), this);
-
-        defaultBehavior = DispenserBlock.DISPENSER_REGISTRY.get(Items.IRON_HORSE_ARMOR);
-        DispenserBlock.registerBehavior((ItemLike) Items.IRON_HORSE_ARMOR, new CustomDispenseBehavior(defaultBehavior));
-    }
-
-    @Override
-    public void onDisable() {
-        DispenserBlock.registerBehavior((ItemLike) Items.IRON_HORSE_ARMOR, defaultBehavior);
     }
 
     @EventHandler
