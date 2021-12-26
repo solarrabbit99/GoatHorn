@@ -33,7 +33,7 @@ Then after add the dependency like so (replace `VERSION` with the version provid
 ```xml
 <dependency>
 	<groupId>com.github.zhenghanlee</groupId>
-	<artifactId>GoatHorn-API</artifactId>
+	<artifactId>GoatHorn</artifactId>
 	<version>VERSION</version>
 </dependency>
 ```
@@ -55,7 +55,7 @@ Then after add the dependency like so (replace `VERSION` with the version provid
 
 ```gradle
 dependencies {
-	    implementation 'com.github.zhenghanlee:GoatHorn-API:VERSION'
+	    implementation 'com.github.zhenghanlee:GoatHorn:VERSION'
 }
 ```
 
