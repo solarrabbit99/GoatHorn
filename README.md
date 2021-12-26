@@ -1,6 +1,6 @@
 # GoatHorn
 
-[![](https://jitpack.io/v/zhenghanlee/GoatHorn-API.svg)](https://jitpack.io/#zhenghanlee/GoatHorn-API)
+[![](https://jitpack.io/v/zhenghanlee/GoatHorn-API.svg)](https://jitpack.io/#zhenghanlee/GoatHorn)
 [![License](https://img.shields.io/github/license/zhenghanlee/GoatHorn)](https://img.shields.io/github/license/zhenghanlee/CustomShop)
 [![Spigot Downloads](http://badge.henrya.org/spigotbukkit/downloads?spigot=95113&name=spigot_downloads)](https://www.spigotmc.org/resources/%E2%AD%901-17-must-have%E2%AD%90-goathorn.95113/)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/zhenghanlee/GoatHorn)](https://img.shields.io/github/commit-activity/m/zhenghanlee/GoatHorn)
