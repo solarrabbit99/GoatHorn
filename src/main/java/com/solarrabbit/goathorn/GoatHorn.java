@@ -53,8 +53,8 @@ public final class GoatHorn extends JavaPlugin implements Listener {
         PluginManager manager = getServer().getPluginManager();
         this.hasItemsAdder = this.getServer().getPluginManager().getPlugin("ItemsAdder") != null;
         if (this.hasItemsAdder) {
-            getServer().getConsoleSender().sendMessage(
-                    ChatColor.AQUA + "[GoatHorn] ItemsAdder detected! Waiting for ItemsAdder to load items...");
+            getServer().getConsoleSender().sendMessage(ChatColor.AQUA +
+                    "[GoatHorn] ItemsAdder detected! Waiting for ItemsAdder to load items...");
             manager.registerEvents(this, this);
         } else {
             this.loadItem();
@@ -97,8 +97,15 @@ public final class GoatHorn extends JavaPlugin implements Listener {
         if (this.sampleHorn != null)
             return;
         if (this.hasItemsAdder) {
-            this.sampleHorn = CustomStack.getInstance("goathorn:goathorn").getItemStack();
-        } else {
+            CustomStack item = CustomStack.getInstance("goathorn:goathorn");
+            if (item != null) {
+                this.sampleHorn = item.getItemStack();
+            } else {
+                getServer().getConsoleSender().sendMessage(ChatColor.RED
+                        + "[GoatHorn] Could not load goat horn from ItemsAdder, perhaps the item does not exist! Loading a vanilla goat horn instead...");
+            }
+        }
+        if (!this.hasItemsAdder || this.sampleHorn == null) {
             this.sampleHorn = new ItemStack(Material.IRON_HORSE_ARMOR);
             ItemMeta meta = this.sampleHorn.getItemMeta();
             meta.setDisplayName(ChatColor.WHITE + getConfig().getString("name"));

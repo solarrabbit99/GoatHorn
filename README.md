@@ -11,7 +11,7 @@
 
 The goal of this project is two-fold:
 
-1. Provide a plugin that implements goat horns, which are experimental features in Bedrock edition, planned to be released on 1.18. Java edition shall have equivalent experience with the item, and we are lucky for it to be possible to be implemented in 1.17.x. The only difference is that horns are looted via killing the goat instead of making goats ramp blocks - a behaviour that has yet to be present in Java 1.17.x.
+1. Provide a plugin that implements goat horns, which are experimental features in Bedrock edition, planned to be released on 1.19. Java edition shall have equivalent experience with the item, and we are lucky for it to be possible to be implemented in 1.17.x. The only difference is that horns are looted via killing the goat instead of making goats ramp blocks - a behaviour that has yet to be present in Java 1.17.x.
 
 2. Provide an API for developers to decide on whether blaring a goat horn trigger any in-game events (such as raids, buff effects, summoning of mobs etc). This is possible via the introduction of `PlayerBlareHornEvent`.
 
